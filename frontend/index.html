@@ -1,65 +1,108 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Face Recognition Attendance</title>
-    <link rel="stylesheet" href="style.css">
+<title>Face Recognition Attendance</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div class="container">
 
-    <h1>Face Recognition Attendance System</h1>
+<h1>Face Recognition Attendance System</h1>
 
-    <!-- Register Student -->
-    <div class="card">
+<!-- Register Student -->
 
-        <h2>Register Student</h2>
+<div class="card">
 
-        <input type="text" id="student_id" placeholder="Student ID">
+<h2>Register Student</h2>
 
-        <input type="text" id="name" placeholder="Student Name">
+<input type="text" id="student_id" placeholder="Student ID">
 
-        <input type="file" id="image">
+<br><br>
 
-        <button onclick="register()">Register Student</button>
+<input type="text" id="name" placeholder="Student Name">
 
-    </div>
+<br><br>
 
-    <!-- Start Attendance -->
-    <div class="card">
+<input type="file" id="image">
 
-        <h2>Start Attendance</h2>
+<br><br>
 
-        <button onclick="startAttendance()">Start Camera</button>
+<button onclick="register()">Register Student</button>
 
-    </div>
+</div>
 
-    <!-- Attendance By Date -->
-    <div class="card">
 
-        <h2>Check Attendance By Date</h2>
+<!-- Browser Camera Attendance -->
 
-        <input type="text" id="date" placeholder="dd:mm:yyyy">
+<div class="card">
 
-        <button onclick="getAttendance()">Check Attendance</button>
+<h2>Start Attendance (Browser Camera)</h2>
+<button onclick="startCamera()">Start Camera</button>
+<button onclick="stopCamera()">Stop Camera</button>
 
-        <div id="attendance_result"></div>
+<br><br>
 
-    </div>
+<div class="camera-box" style="position:relative; width:480px; height:320px;">
 
-    <!-- Total Attendance -->
-    <div class="card">
+<video id="video"
+width="480"
+height="320"
+autoplay
+playsinline
+muted
+style="position:absolute; top:0; left:0;">
+</video>
 
-        <h2>Total Attendance of Student</h2>
+<canvas id="canvas"
+width="480"
+height="320"
+style="position:absolute; top:0; left:0;">
+</canvas>
 
-        <input type="text" id="student_search" placeholder="Student ID">
+</div>
 
-        <button onclick="totalAttendance()">Check Total</button>
+<br>
 
-        <div id="total_result"></div>
+<p id="detected">Camera not started</p>
 
-    </div>
+</div>
+
+
+<!-- Attendance By Date -->
+
+<div class="card">
+
+<h2>Check Attendance By Date</h2>
+
+<input type="date" id="date">
+
+<br><br>
+
+<button onclick="getAttendance()">Check Attendance</button>
+
+<div id="attendance_result"></div>
+
+</div>
+
+
+<!-- Total Attendance -->
+
+<div class="card">
+
+<h2>Total Attendance of Student</h2>
+
+<input type="text" id="student_search" placeholder="Student ID">
+
+<br><br>
+
+<button onclick="totalAttendance()">Check Total</button>
+
+<div id="total_result"></div>
+
+</div>
 
 </div>
 

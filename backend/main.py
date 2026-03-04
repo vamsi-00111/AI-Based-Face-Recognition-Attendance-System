@@ -4,13 +4,22 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
 import shutil
+import numpy as np
+import cv2
 from face_engine import FaceDetector
+
+
+# ---------------- LOAD ENV ----------------
 
 load_dotenv()
 
-app = FastAPI()
+# ---------------- FASTAPI APP ----------------
 
-# Enable CORS (important for frontend)
+app = FastAPI(title="Face Recognition Attendance API")
+
+
+# ---------------- CORS ----------------
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -19,63 +28,136 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# MongoDB
+
+# ---------------- MONGODB ----------------
+
 mongo_uri = os.getenv("MONGO_URI")
+
 client = MongoClient(mongo_uri)
+
 db = client["attendence_app"]
 
 users = db["users"]
 attendance = db["attendence"]
 
+print("Connected to MongoDB")
+print("Collections:", db.list_collection_names())
+
+
+# ---------------- FACE DETECTOR ----------------
+
 detector = FaceDetector(users)
+
+
+# ---------------- HOME ----------------
 
 @app.get("/")
 def home():
-    return {"message": "API Running"}
+    return {"message": "Face Recognition Attendance API Running"}
+
+
+# ---------------- REGISTER STUDENT ----------------
 
 @app.post("/register")
-async def register(
+async def register_student(
     student_id: str = Form(...),
     name: str = Form(...),
     file: UploadFile = File(...)
 ):
-    
-    file_path = f"temp_{file.filename}"
 
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    try:
 
-    result = detector.encoding_face(users, student_id, file_path, name)
+        file_path = f"temp_{student_id}.jpg"
 
-    if result is None:
-        result = "Student registered successfully"
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
 
-    return {"status": result}
+        result = detector.encoding_face(users, student_id, file_path, name)
 
-@app.get("/start")
-def start_attendance():
-    detector.run(attendance)
-    return {"message": "Attendance Started"}
+        os.remove(file_path)
+
+        return {
+            "status": "success",
+            "message": result
+        }
+
+    except Exception as e:
+
+        return {
+            "status": "error",
+            "message": str(e)
+        }
+
+
+# ---------------- FACE DETECTION ----------------
+
+@app.post("/detect")
+async def detect_face(file: UploadFile = File(...)):
+
+    try:
+
+        contents = await file.read()
+
+        np_img = np.frombuffer(contents, np.uint8)
+
+        frame = cv2.imdecode(np_img, cv2.IMREAD_COLOR)
+
+        if frame is None:
+            return {"detected_faces": []}
+
+        detected_faces = detector.detect_faces_from_frame(frame, attendance)
+
+        return {"detected_faces": detected_faces}
+
+    except Exception as e:
+
+        return {
+            "detected_faces": [],
+            "error": str(e)
+        }
+
+
+# ---------------- ATTENDANCE BY DATE ----------------
 
 @app.get("/attendance/date/{date}")
 def get_attendance_by_date(date: str):
-    
-    records = list(attendance.find(
-        {"date": date},
-        {"_id": 0}
-    ))
 
-    return {"records": records}
+    try:
+
+        records = list(
+            attendance.find(
+                {"date": date},
+                {"_id": 0}
+            )
+        )
+
+        return {
+            "date": date,
+            "records": records
+        }
+
+    except Exception as e:
+
+        return {"error": str(e)}
+
+
+# ---------------- TOTAL ATTENDANCE ----------------
 
 @app.get("/attendance/student/{student_id}")
 def total_attendance(student_id: str):
 
-    count = attendance.count_documents({
-        "student_id": student_id,
-        "status": "Present"
-    })
+    try:
 
-    return {
-        "student_id": student_id,
-        "total_present": count
-    }
+        count = attendance.count_documents({
+            "student_id": student_id,
+            "status": "Present"
+        })
+
+        return {
+            "student_id": student_id,
+            "total_present": count
+        }
+
+    except Exception as e:
+
+        return {"error": str(e)}
