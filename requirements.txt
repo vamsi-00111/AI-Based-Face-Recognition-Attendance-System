@@ -1,0 +1,8 @@
+fastapi[standard]
+python-multipart
+face-recognition
+opencv-python
+numpy
+motor
+python-dotenv
+pydantic-settings

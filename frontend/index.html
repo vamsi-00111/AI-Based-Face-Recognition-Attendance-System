@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Face Recognition Attendance</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Face Recognition Attendance System</h1>
+
+    <!-- Register Student -->
+    <div class="card">
+
+        <h2>Register Student</h2>
+
+        <input type="text" id="student_id" placeholder="Student ID">
+
+        <input type="text" id="name" placeholder="Student Name">
+
+        <input type="file" id="image">
+
+        <button onclick="register()">Register Student</button>
+
+    </div>
+
+    <!-- Start Attendance -->
+    <div class="card">
+
+        <h2>Start Attendance</h2>
+
+        <button onclick="startAttendance()">Start Camera</button>
+
+    </div>
+
+    <!-- Attendance By Date -->
+    <div class="card">
+
+        <h2>Check Attendance By Date</h2>
+
+        <input type="text" id="date" placeholder="dd:mm:yyyy">
+
+        <button onclick="getAttendance()">Check Attendance</button>
+
+        <div id="attendance_result"></div>
+
+    </div>
+
+    <!-- Total Attendance -->
+    <div class="card">
+
+        <h2>Total Attendance of Student</h2>
+
+        <input type="text" id="student_search" placeholder="Student ID">
+
+        <button onclick="totalAttendance()">Check Total</button>
+
+        <div id="total_result"></div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
