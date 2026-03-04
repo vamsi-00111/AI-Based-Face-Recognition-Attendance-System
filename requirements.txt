@@ -1,8 +1,10 @@
-fastapi[standard]
-python-multipart
-face-recognition
-opencv-python
-numpy
-motor
+fastapi
+uvicorn
+gunicorn
+pymongo
 python-dotenv
-pydantic-settings
+opencv-python
+face-recognition
+dlib-bin
+numpy
+python-multipart
