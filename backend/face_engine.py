@@ -1,8 +1,9 @@
-from logger import logger
+
 import face_recognition
 import numpy as np
 import datetime
 import cv2
+from logger import logger
 
 
 class FaceDetector:
