@@ -1,9 +1,10 @@
+--prefer-binary
 fastapi
 uvicorn
 gunicorn
 pymongo
 python-dotenv
-opencv-python
+opencv-python-headless
 face-recognition
 dlib-bin
 numpy
