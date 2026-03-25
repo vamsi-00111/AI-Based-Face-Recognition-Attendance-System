@@ -1,0 +1,2 @@
+[build]
+nixpkgs = ["xorg.libX11", "xorg.libXext", "xorg.libXrender"]
