@@ -1,7 +1,7 @@
 import logging
 import os
 from pathlib import Path
-import CONFIG
+from backend import CONFIG
 from datetime import datetime
 
 #definig logging path and making it

@@ -6,7 +6,7 @@ import os
 import shutil
 import numpy as np
 import cv2
-from face_engine import FaceDetector
+from backend.face_engine import FaceDetector
 
 
 # ---------------- LOAD ENV ----------------
