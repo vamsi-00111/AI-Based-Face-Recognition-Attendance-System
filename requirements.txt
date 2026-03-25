@@ -9,4 +9,4 @@ face-recognition
 dlib-bin
 numpy
 python-multipart
-git+https://github.com/ageitgey/face_recognition_models
+face-recognition-models
